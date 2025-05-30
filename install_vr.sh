@@ -15,9 +15,8 @@ cd ..
 rm -rf steam-using-gamescope-guide
 
 # install wivrn and other VR packages
-yay -S wivrn-server wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
-systemctl --user enable wivrn
-systemctl --user start wivrn
+yay -S wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
+systemctl --user enable --now wivrn
 
 sleep 3
 
