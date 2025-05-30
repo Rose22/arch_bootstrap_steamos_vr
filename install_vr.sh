@@ -25,7 +25,7 @@ sleep 3
 mkdir $HOME/.vr_scripts
 mkdir $HOME/.vr_scripts/logs
 
-echo "$(cat <<EOF
+"
 #!/bin/sh
 
 # remove the gamescope performance overlay (it can mess with things)
@@ -45,19 +45,17 @@ wlx-overlay-s --headless --openxr --log-to ~/.vr_scripts/logs/wlx.log
 
 # switch audio output back to the stored default
 pactl set-default-sink $SAVED_AUDIO_SINK
-EOF
-)" > $HOME/.vr_scripts/start_wlxoverlay.sh
+" > $HOME/.vr_scripts/start_wlxoverlay.sh
 chmod +x $HOME/.vr_scripts/start_wlxoverlay.sh
 
 mkdir -p $HOME/.config/wivrn
-echo "$(cat <<EOF
+"
 {
   "application": [
 	  "$HOME/.vr_scripts/start_wlxoverlay.sh"
   ]
 }
-EOF
-)" > $HOME/.config/wivrn/config.json
+" > $HOME/.config/wivrn/config.json
 
 # cleanup
 cd
