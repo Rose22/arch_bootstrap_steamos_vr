@@ -59,3 +59,10 @@ echo "
 # cleanup
 cd
 sudo rm -rf /tmp/vr_install
+
+echo "
+Done! Now reboot your system, and in your display manager, there should be a new option called \"Steam (Gamescope)\". Log into that, and you should be in the steamOS UI!
+Wivrn should also have been enabled, and on your quest, you should be able to connect.
+
+When you're ready, set that session as the default in your display manager, so that your system boots straight into steamOS mode.
+"
