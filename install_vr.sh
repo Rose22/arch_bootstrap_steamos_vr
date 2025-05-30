@@ -25,7 +25,7 @@ sleep 3
 mkdir $HOME/.vr_scripts
 mkdir $HOME/.vr_scripts/logs
 
-"
+echo "
 #!/bin/sh
 
 # remove the gamescope performance overlay (it can mess with things)
@@ -49,7 +49,7 @@ pactl set-default-sink $SAVED_AUDIO_SINK
 chmod +x $HOME/.vr_scripts/start_wlxoverlay.sh
 
 mkdir -p $HOME/.config/wivrn
-"
+echo "
 {
   "application": [
 	  "$HOME/.vr_scripts/start_wlxoverlay.sh"
