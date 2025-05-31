@@ -173,8 +173,10 @@ rm -rfv steam-using-gamescope-guide
 # install wivrn and other VR packages
 announce "installing wivrn, wlx-overlay-s and wayvr-dashboard.."
 paru --noconfirm -S wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
-systemctl enable avahi-daemon
-systemctl --user enable wivrn
+sudo systemctl enable avahi-daemon
+# manually enable the service because using systemctl over sudo doesn't work well without very weird workarounds
+sudo -u steam mkdir -p /home/steam/.config/systemd/user/default.target.wants
+sudo -u steam ln -s /usr/lib/systemd/user/wivrn.service /home/steam/.config/systemd/user/default.target.wants/wivrn.service
 
 # install custom scripts and configs
 sudo -u steam mkdir /home/steam/.scripts
@@ -194,7 +196,7 @@ EOF
 sudo -u steam chmod +x /home/steam/.scripts/start_wlxoverlay.sh
 
 sudo -u steam mkdir -p /home/steam/.config/wivrn
-cat <<EOF | tee /home/steam/.config/wivrn/config.json
+cat <<EOF | sudo -u steam tee /home/steam/.config/wivrn/config.json
 {
   "application": [
 	  "/home/steam/.scripts/start_wlxoverlay.sh"
