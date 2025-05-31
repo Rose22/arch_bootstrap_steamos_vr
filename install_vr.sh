@@ -51,7 +51,8 @@ Option "PasswordFile" "/root/.vnc/passwd"
 EndSection
 EOF
 
-sudo pacman --noconfirm -Sy i3-wm dmenu rofi 
+# we need a window manager in order to be able to log into the VNC server
+sudo pacman --noconfirm -Sy i3-wm dmenu rofi kitty
 
 sudo systemctl enable --now vncserver@:1
 
