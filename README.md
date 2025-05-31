@@ -18,5 +18,10 @@ It also, for convenience:
 - sets up tigervnc so you can use graphical applications remotely inside the steam account, without having to switch to desktop. the default window manager on the vnc server is i3, use mod+d to open a launch menu.
 - sway, in case you want to use the desktop outside of VNC
 
+Prerequisites:
+- Your PC must be running an AMD CPU and GPU
+- multilib repository must be enabled
+- pipewire or pulseaudio
+
 ## WARNING
-this is intended to be used on a MINIMAL arch install! it modifies a ton of system critical stuff (such as sshd, vncserver, and a bunch of other things) to do it's thing. use it on an existing system at your own risk.
+this is intended to be used on a MINIMAL arch install! it modifies a ton of system critical stuff (such as sshd, vncserver, and a bunch of other things) to do it's thing. use it on an existing system at your own risk. It would work and add the steam user and reconfigure the system to autostart gamescope on boot, but it will replace some system configs.
