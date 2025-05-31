@@ -9,6 +9,10 @@ if [ "$confirm" != "y" ]; then
 	exit
 fi
 
+announce "enabling sshd for remote access, use it in case anything goes wrong or just in the future to access your PC"
+sudo pacman --noconfirm -Sy openssh
+sudo systemctl enable --now sshd
+
 announce "installing AMD GPU drivers.."
 sudo pacman --noconfirm -Sy mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
 
@@ -19,8 +23,6 @@ cd vr_install
 
 # install steamOS mode (steam on gamescope) required packages
 announce "setting up steam and gamescope.."
-announce "enabling sshd for remote access, use it in case anything goes wrong or just in the future to access your PC"
-sudo systemctl enable --now sshd
 
 announce "installing vnc server for even more remote access.."
 sudo pacman --noconfirm -Sy tigervnc
