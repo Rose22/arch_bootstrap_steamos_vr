@@ -152,7 +152,7 @@ IDENTIFY_ENVS=false
 EOF
 
 announce "enabling emptty.."
-sudo systemctl enable emppty
+sudo systemctl enable emptty
 
 announce "installing steam & gamescope.."
 sudo pacman --noconfirm -Sy steam gamescope mangohud lib32-mangohud 
