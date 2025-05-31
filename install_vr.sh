@@ -5,6 +5,7 @@ function announce() {
 
 function wait() {
 	announce "Press enter to continue.."
+ 	read
 }
 
 echo "This script will permanently turn your arch linux install into a steamOS clone that also has VR support. are you sure you wish to continue? (y/N)"
@@ -42,7 +43,7 @@ geometry=1024x768
 alwaysshared
 EOF
 
-cat <<EOF > /etc/X11/xorg.conf.d/10-vnc.conf
+sudo cat <<EOF > /etc/X11/xorg.conf.d/10-vnc.conf
 Section "Module"
 Load "vnc"
 EndSection
