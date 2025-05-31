@@ -2,6 +2,8 @@
 This script turns any minimal arch linux install into a steamOS-like setup that has built in VR support using wivr.
 Ensure the multilib repository is enabled in your minimal arch linux installation before you use this script!
 
+It's a very minimal install, that is laser focused on providing the best and most performant linux VR experience possible.
+
 It installs:
 
 - steam running on it's own user account, in gamescope, in steamOS mode (with the steamOS ui)
