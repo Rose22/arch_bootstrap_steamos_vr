@@ -9,6 +9,9 @@ if [ "$confirm" != "y" ]; then
 	exit
 fi
 
+announce "installing AMD GPU drivers.."
+sudo pacman --noconfirm -Sy mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
+
 cd /tmp
 
 mkdir vr_install
