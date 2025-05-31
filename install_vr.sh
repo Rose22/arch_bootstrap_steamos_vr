@@ -72,7 +72,8 @@ announce "installing emptty display manager.."
 sudo paru --noconfirm -S emptty
 
 announce "adding steam user (seperate user ensures less chance of failure).."
-useradd -m -G audio,input steam
+sudo groupadd nopasswdlogin
+sudo useradd -m -G audio,input,nopasswdlogin steam
 
 announce "writing emptty config.."
 cat <<EOF | sudo tee /etc/emptty/conf
