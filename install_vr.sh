@@ -179,7 +179,7 @@ systemctl --user enable wivrn
 # install custom scripts and configs
 sudo -u steam mkdir /home/steam/.scripts
 
-cat << EOF | sudo -u steam tee $HOME/.scripts/start_wlxoverlay.sh
+cat << EOF | sudo -u steam tee /home/steam/.scripts/start_wlxoverlay.sh
 #!/bin/sh
 
 # remove the gamescope performance overlay (it can mess with things)
@@ -191,13 +191,13 @@ export WAYLAND_DISPLAY=gamescope-0
 
 wlx-overlay-s --headless --openxr
 EOF
-chmod +x $HOME/.scripts/start_wlxoverlay.sh
+sudo -u steam chmod +x /home/steam/.scripts/start_wlxoverlay.sh
 
-mkdir -p $HOME/.config/wivrn
-cat <<EOF | tee $HOME/.config/wivrn/config.json
+sudo -u steam mkdir -p /home/steam/.config/wivrn
+cat <<EOF | tee /home/steam/.config/wivrn/config.json
 {
   "application": [
-	  "$HOME/.scripts/start_wlxoverlay.sh"
+	  "/home/steam/.scripts/start_wlxoverlay.sh"
   ]
 }
 EOF
