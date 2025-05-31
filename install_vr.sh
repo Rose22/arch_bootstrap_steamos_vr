@@ -3,6 +3,10 @@ function announce() {
 	echo "[VR INSTALL] $1"
 }
 
+function wait() {
+	announce "Press enter to continue.."
+}
+
 echo "This script will permanently turn your arch linux install into a steamOS clone that also has VR support. are you sure you wish to continue? (y/N)"
 read confirm
 if [ "$confirm" != "y" ]; then
@@ -12,17 +16,16 @@ fi
 announce "enabling sshd for remote access, use it in case anything goes wrong or just in the future to access your PC"
 sudo pacman --noconfirm -Sy openssh
 sudo systemctl enable --now sshd
+wait
 
 announce "installing AMD GPU drivers.."
 sudo pacman --noconfirm -Sy mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
+wait
 
 cd /tmp
 
 mkdir vr_install
 cd vr_install
-
-# install steamOS mode (steam on gamescope) required packages
-announce "setting up steam and gamescope.."
 
 announce "installing vnc server for even more remote access.."
 sudo pacman --noconfirm -Sy tigervnc
@@ -50,22 +53,26 @@ Option "UserPasswdVerifier" "VncAuth"
 Option "PasswordFile" "/root/.vnc/passwd"
 EndSection
 EOF
+wait
 
 sudo pacman --noconfirm -Sy i3-wm dmenu rofi 
 
 sudo systemctl enable --now vncserver@:1
 
 announce "installed VNC, you can now log in remotely to use graphical applications!"
+wait
 
 announce "installing paru.."
 sudo pacman --noconfirm -Sy --needed base-devel git rust
 git clone https://aur.archlinux.org/paru.git
 cd paru
-makepkg -si
+makepkg --noconfirm -si
 cd ..
+wait
 
 announce "installing emptty display manager.."
 sudo paru --noconfirm -S emptty
+wait
 
 announce "adding steam user (seperate user ensures less chance of failure).."
 useradd -m -G audio,input steam
@@ -150,6 +157,7 @@ VERTICAL_SELECTION=true
 #If set true, environmental groups are printed to differ Xorg/Wayland/Custom/UserCustom desktops.
 IDENTIFY_ENVS=false
 EOF
+wait
 
 announce "installing steam & gamescope.."
 sudo pacman --noconfirm -Sy steam gamescope mangohud lib32-mangohud 
@@ -159,8 +167,10 @@ chmod +x installer.sh
 sudo ./installer.sh
 cd ..
 rm -rfv steam-using-gamescope-guide
+wait
 
 # install wivrn and other VR packages
+announce "installing wivrn, wlx-overlay-s and wayvr-dashboard.."
 paru --noconfirm -S wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
 systemctl enable --now avahi-daemon
 systemctl --user enable --now wivrn
@@ -187,8 +197,8 @@ chmod +x $HOME/.scripts/start_wlxoverlay.sh
 mkdir -p $HOME/.config/wivrn
 cat <<EOF > $HOME/.config/wivrn/config.json
 {
-  \"application\": [
-	  \"$HOME/.scripts/start_wlxoverlay.sh\"
+  "application": [
+	  "$HOME/.scripts/start_wlxoverlay.sh"
   ]
 }
 EOF
