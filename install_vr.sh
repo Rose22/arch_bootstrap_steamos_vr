@@ -58,7 +58,7 @@ sudo systemctl enable --now vncserver@:1
 announce "installed VNC, you can now log in remotely to use graphical applications!"
 
 announce "installing paru.."
-sudo pacman --noconfirm -Sy --needed base-devel git
+sudo pacman --noconfirm -Sy --needed base-devel git rust
 git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si
