@@ -51,8 +51,11 @@ Option "PasswordFile" "/root/.vnc/passwd"
 EndSection
 EOF
 
-# we need a window manager in order to be able to log into the VNC server
+# we need an X11 window manager in order to be able to log into the VNC server
 sudo pacman --noconfirm -Sy i3-wm dmenu rofi kitty
+
+# but let's also have a wayland window manager handy
+sudo pacman --noconfirm -Sy sway
 
 sudo systemctl enable --now vncserver@:1
 
