@@ -36,18 +36,18 @@ announce "installing vnc server for even more remote access.."
 sudo pacman --noconfirm -Sy tigervnc
 announce "enter the password you wish to use for the VNC server"
 vncpasswd
-sudo cat <<EOF > /etc/tigervnc/vncserver.users
+cat <<EOF | sudo tee /etc/tigervnc/vncserver.users
 :1=$(whoami)
 EOF
 
 mkdir -p $HOME/.config/tigervnc
-cat <<EOF > $HOME/.config/tigervnc/config
+cat <<EOF | tee $HOME/.config/tigervnc/config
 session=i3
 geometry=1024x768
 alwaysshared
 EOF
 
-sudo cat <<EOF > /etc/X11/xorg.conf.d/10-vnc.conf
+sudo cat <<EOF | sudo tee /etc/X11/xorg.conf.d/10-vnc.conf
 Section "Module"
 Load "vnc"
 EndSection
@@ -83,7 +83,7 @@ announce "adding steam user (seperate user ensures less chance of failure).."
 useradd -m -G audio,input steam
 
 announce "writing emptty config.."
-sudo cat <<EOF > /etc/emptty/conf
+cat <<EOF | sudo tee /etc/emptty/conf
 # TTY, where emptty will start.
 TTY_NUMBER=7
 
@@ -185,7 +185,7 @@ sleep 3
 # install custom scripts and configs
 mkdir $HOME/.scripts
 
-cat << EOF > $HOME/.scripts/start_wlxoverlay.sh
+cat << EOF | tee $HOME/.scripts/start_wlxoverlay.sh
 #!/bin/sh
 
 # remove the gamescope performance overlay (it can mess with things)
@@ -200,7 +200,7 @@ EOF
 chmod +x $HOME/.scripts/start_wlxoverlay.sh
 
 mkdir -p $HOME/.config/wivrn
-cat <<EOF > $HOME/.config/wivrn/config.json
+cat <<EOF | tee $HOME/.config/wivrn/config.json
 {
   "application": [
 	  "$HOME/.scripts/start_wlxoverlay.sh"
