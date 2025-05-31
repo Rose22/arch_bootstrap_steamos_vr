@@ -19,6 +19,10 @@ sudo pacman --noconfirm -Sy openssh
 sudo systemctl enable --now sshd
 wait
 
+announce "installing networkmanager.."
+sudo pacman --noconfirm -Sy networkmanager
+wait
+
 announce "installing AMD GPU drivers.."
 sudo pacman --noconfirm -Sy mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
 wait
