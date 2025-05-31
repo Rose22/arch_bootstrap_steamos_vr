@@ -9,6 +9,9 @@ if [ "$confirm" != "y" ]; then
 	exit
 fi
 
+mkdir vr_install
+cd vr_install
+
 announce "enabling sshd for remote access, use it in case anything goes wrong or just in the future to access your PC"
 sudo pacman --noconfirm -Sy openssh
 sudo systemctl enable --now sshd
@@ -19,10 +22,10 @@ sudo pacman --noconfirm -Sy networkmanager
 announce "installing AMD GPU drivers.."
 sudo pacman --noconfirm -Sy mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
 
-cd /tmp
-
-mkdir vr_install
-cd vr_install
+announce "adding steam user (seperate user ensures less chance of failure).."
+sudo groupadd nopasswdlogin
+sudo useradd -m -G nopasswdlogin steam
+sudo passwd -d steam
 
 announce "installing vnc server for even more remote access.."
 sudo pacman --noconfirm -Sy tigervnc
@@ -30,6 +33,7 @@ announce "enter the password you wish to use for the VNC server"
 vncpasswd
 cat <<EOF | sudo tee /etc/tigervnc/vncserver.users
 :1=$(whoami)
+:2=steam
 EOF
 
 mkdir -p $HOME/.config/tigervnc
@@ -39,7 +43,15 @@ geometry=1024x768
 alwaysshared
 EOF
 
-sudo cat <<EOF | sudo tee /etc/X11/xorg.conf.d/10-vnc.conf
+sudo mkdir -p /home/steam/.config/tigervnc
+cat <<EOF | sudo tee /home/steam/.config/tigervnc/config
+session=i3
+geometry=1024x768
+alwaysshared
+EOF
+sudo chown -R steam:steam /home/steam/.config/tigervnc
+
+cat <<EOF | sudo tee /etc/X11/xorg.conf.d/10-vnc.conf
 Section "Module"
 Load "vnc"
 EndSection
@@ -58,6 +70,7 @@ sudo pacman --noconfirm -Sy i3-wm dmenu rofi kitty
 sudo pacman --noconfirm -Sy sway waybar swaync swaybg swaylock swayimg swayidle
 
 sudo systemctl enable --now vncserver@:1
+sudo systemctl enable --now vncserver@:2
 
 announce "installed VNC, you can now log in remotely to use graphical applications!"
 
@@ -70,10 +83,6 @@ cd ..
 
 announce "installing emptty display manager.."
 sudo paru --noconfirm -S emptty
-
-announce "adding steam user (seperate user ensures less chance of failure).."
-sudo groupadd nopasswdlogin
-sudo useradd -m -G audio,input,nopasswdlogin steam
 
 announce "writing emptty config.."
 cat <<EOF | sudo tee /etc/emptty/conf
@@ -203,8 +212,9 @@ cat <<EOF | tee $HOME/.config/wivrn/config.json
 EOF
 
 # cleanup
-cd
-sudo rm -rf /tmp/vr_install
+cd ..
+announce "cleaning up.."
+sudo rm -rfv vr_install
 
 announce "
 Done! Now reboot your system, and you should immediately be logged into steamOS mode.
