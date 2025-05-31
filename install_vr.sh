@@ -21,7 +21,7 @@ sudo systemctl enable --now sshd
 
 announce "installing networkmanager.."
 sudo pacman --noconfirm -Sy networkmanager
-sudo systemctl enable networkmanager
+sudo systemctl enable NetworkManager
 
 announce "installing AMD GPU drivers.."
 sudo pacman --noconfirm -Sy mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
