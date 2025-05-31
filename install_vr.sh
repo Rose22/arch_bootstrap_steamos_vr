@@ -3,6 +3,9 @@ function announce() {
 	echo "[VR INSTALL] $1"
 }
 
+echo "WARNING: ensure you have the multilib repository enabled!! if it isn't, stuff will break during install."
+echo "This is your last chance to cancel out. (use ctrl+Z and kill the process)"
+echo "---"
 echo "This script will permanently turn your arch linux install into a steamOS clone that also has VR support. are you sure you wish to continue? (y/N)"
 read confirm
 if [ "$confirm" != "y" ]; then
