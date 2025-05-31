@@ -15,16 +15,16 @@ cd ..
 rm -rf steam-using-gamescope-guide
 
 # install wivrn and other VR packages
-yay -S wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
-systemctl --user enable --now wivrn
+yay -S wivrn-server wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
+systemctl --user enable wivrn
+systemctl --user start wivrn
 
 sleep 3
 
 # install custom scripts and configs
 mkdir $HOME/.vr_scripts
-mkdir $HOME/.vr_scripts/logs
 
-echo "
+echo "$(cat <<EOF
 #!/bin/sh
 
 # remove the gamescope performance overlay (it can mess with things)
@@ -34,26 +34,29 @@ unset LD_PRELOAD
 unset DISPLAY
 export WAYLAND_DISPLAY=gamescope-0
 
-wlx-overlay-s --headless --openxr --log-to ~/.vr_scripts/logs/wlx.log
-" > $HOME/.vr_scripts/start_wlxoverlay.sh
-chmod +x $HOME/.vr_scripts/start_wlxoverlay.sh
+# store current audio sink
+export SAVED_AUDIO_SINK=\$(pactl get-default-sink)
+
+# switch to the wivrn audio output
+pactl set-default-sink wivrn.sink
+
+wlx-overlay-s --headless --openxr --log-to ~/.logs/wlx.log
+
+# switch audio output back to the stored default
+pactl set-default-sink $SAVED_AUDIO_SINK
+EOF
+)" > $HOME/.vr_scripts/start_wlxoverlay.sh
 
 mkdir -p $HOME/.config/wivrn
-echo "
+echo "$(cat <<EOF
 {
-  \"application\": [
-	  \"$HOME/.vr_scripts/start_wlxoverlay.sh\"
+  "application": [
+	  "$HOME/.vr_scripts/start_wlxoverlay.sh"
   ]
 }
-" > $HOME/.config/wivrn/config.json
+EOF
+)" > $HOME/.config/wivrn/config.json
 
 # cleanup
 cd
 sudo rm -rf /tmp/vr_install
-
-echo "
-Done! Now reboot your system, and in your display manager, there should be a new option called \"Steam (Gamescope)\". Log into that, and you should be in the steamOS UI!
-Wivrn should also have been enabled, and on your quest, you should be able to connect.
-
-When you're ready, set that session as the default in your display manager, so that your system boots straight into steamOS mode.
-"
