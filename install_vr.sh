@@ -59,7 +59,7 @@ EndSection
 EOF
 
 # we need an X11 window manager in order to be able to log into the VNC server
-sudo pacman --noconfirm -Sy i3-wm dmenu rofi kitty
+sudo pacman --noconfirm -Sy i3-wm i3status dmenu rofi kitty
 
 # but let's also have a wayland window manager handy
 sudo pacman --noconfirm -Sy sway waybar swaync swaybg swaylock swayimg swayidle
