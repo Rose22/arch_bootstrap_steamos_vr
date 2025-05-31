@@ -38,13 +38,12 @@ cat <<EOF | sudo tee /etc/tigervnc/vncserver.users
 :1=steam
 EOF
 
-sudo mkdir -p /home/steam/.config/tigervnc
-cat <<EOF | sudo tee /home/steam/.config/tigervnc/config
+sudo -u steam mkdir -p /home/steam/.config/tigervnc
+cat <<EOF | sudo -u steam tee /home/steam/.config/tigervnc/config
 session=i3
 geometry=1024x768
 alwaysshared
 EOF
-sudo chown -R steam:steam /home/steam/.config/tigervnc
 
 cat <<EOF | sudo tee /etc/X11/xorg.conf.d/10-vnc.conf
 Section "Module"
@@ -178,9 +177,9 @@ systemctl enable avahi-daemon
 systemctl --user enable wivrn
 
 # install custom scripts and configs
-mkdir $HOME/.scripts
+sudo -u steam mkdir /home/steam/.scripts
 
-cat << EOF | tee $HOME/.scripts/start_wlxoverlay.sh
+cat << EOF | sudo -u steam tee $HOME/.scripts/start_wlxoverlay.sh
 #!/bin/sh
 
 # remove the gamescope performance overlay (it can mess with things)
