@@ -34,24 +34,15 @@ unset LD_PRELOAD
 unset DISPLAY
 export WAYLAND_DISPLAY=gamescope-0
 
-# store current audio sink
-export SAVED_AUDIO_SINK=\$(pactl get-default-sink)
-
-# switch to the wivrn audio output
-pactl set-default-sink wivrn.sink
-
 wlx-overlay-s --headless --openxr --log-to ~/.vr_scripts/logs/wlx.log
-
-# switch audio output back to the stored default
-pactl set-default-sink $SAVED_AUDIO_SINK
 " > $HOME/.vr_scripts/start_wlxoverlay.sh
 chmod +x $HOME/.vr_scripts/start_wlxoverlay.sh
 
 mkdir -p $HOME/.config/wivrn
 echo "
 {
-  "application": [
-	  "$HOME/.vr_scripts/start_wlxoverlay.sh"
+  \"application\": [
+	  \"$HOME/.vr_scripts/start_wlxoverlay.sh\"
   ]
 }
 " > $HOME/.config/wivrn/config.json
