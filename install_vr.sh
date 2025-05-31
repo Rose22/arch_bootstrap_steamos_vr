@@ -55,7 +55,7 @@ EOF
 sudo pacman --noconfirm -Sy i3-wm dmenu rofi kitty
 
 # but let's also have a wayland window manager handy
-sudo pacman --noconfirm -Sy sway
+sudo pacman --noconfirm -Sy sway waybar swaync swaybg swaylock swayimg swayidle
 
 sudo systemctl enable --now vncserver@:1
 
