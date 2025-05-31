@@ -222,9 +222,11 @@ sudo rm -rfv vr_install
 announce "
 Done! Now reboot your system, and you should immediately be logged into steamOS mode.
 From now on, you can remote into your system using ssh for console access, and vnc for graphical access.
+Feel free to uninstall tigervnc if you don't want this!
 
 The password for user steam is steam. (change it if you wish, it has no effect on autologin)
-The password for accessing vnc as steam is steamvnc. You can use this to do stuff like add non-steam games to steam, install software needed under the steam account such as decky-loader, etc.
+You can access your main VNC through port 5901.
+You can access the steam user VNC through port 5902. The password is steamvnc. You can use this to do stuff like add non-steam games to steam, install software needed under the steam account such as decky-loader, etc.
 
 Wivrn should also have been enabled, and on your quest, you should be able to connect!
 Open wivrn-dashboard in order to begin the wivrn pairing process. You can either do this using a mouse on your PC, or through VNC.
