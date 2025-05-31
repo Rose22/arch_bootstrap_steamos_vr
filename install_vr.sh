@@ -28,7 +28,8 @@ sudo pacman --noconfirm -Sy mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
 
 announce "adding steam user (seperate user ensures less chance of failure).."
 sudo groupadd nopasswdlogin
-sudo useradd -m -G nopasswdlogin -p steam steam
+sudo useradd -m -G nopasswdlogin steam
+sudo bash -c "(echo steam; echo steam) | passwd steam"
 
 announce "installing vnc server for even more remote access.."
 sudo pacman --noconfirm -Sy tigervnc
