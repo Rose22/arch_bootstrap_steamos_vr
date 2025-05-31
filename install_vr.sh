@@ -151,6 +151,9 @@ VERTICAL_SELECTION=true
 IDENTIFY_ENVS=false
 EOF
 
+announce "enabling emptty.."
+sudo systemctl enable emppty
+
 announce "installing steam & gamescope.."
 sudo pacman --noconfirm -Sy steam gamescope mangohud lib32-mangohud 
 git clone https://github.com/shahnawazshahin/steam-using-gamescope-guide.git
