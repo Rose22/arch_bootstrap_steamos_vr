@@ -31,19 +31,10 @@ sudo useradd -m -G nopasswdlogin -p steam steam
 
 announce "installing vnc server for even more remote access.."
 sudo pacman --noconfirm -Sy tigervnc
-announce "enter the password you wish to use for the VNC server"
-vncpasswd
+
 sudo -u steam bash -c "(echo steamvnc; echo steamvnc) | vncpasswd"
 cat <<EOF | sudo tee /etc/tigervnc/vncserver.users
-:1=$(whoami)
-:2=steam
-EOF
-
-mkdir -p $HOME/.config/tigervnc
-cat <<EOF | tee $HOME/.config/tigervnc/config
-session=i3
-geometry=1024x768
-alwaysshared
+:1=steam
 EOF
 
 sudo mkdir -p /home/steam/.config/tigervnc
@@ -72,10 +63,9 @@ sudo pacman --noconfirm -Sy i3-wm dmenu rofi kitty
 # but let's also have a wayland window manager handy
 sudo pacman --noconfirm -Sy sway waybar swaync swaybg swaylock swayimg swayidle
 
-sudo systemctl enable --now vncserver@:1
-sudo systemctl enable --now vncserver@:2
+sudo systemctl enable vncserver@:1
 
-announce "installed VNC, you can now log in remotely to use graphical applications!"
+announce "installed VNC, you can now log in remotely as steam to use graphical applications!"
 
 announce "installing paru.."
 sudo pacman --noconfirm -Sy --needed base-devel git rust
@@ -183,10 +173,8 @@ rm -rfv steam-using-gamescope-guide
 # install wivrn and other VR packages
 announce "installing wivrn, wlx-overlay-s and wayvr-dashboard.."
 paru --noconfirm -S wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
-systemctl enable --now avahi-daemon
-systemctl --user enable --now wivrn
-
-sleep 3
+systemctl enable avahi-daemon
+systemctl --user enable wivrn
 
 # install custom scripts and configs
 mkdir $HOME/.scripts
@@ -221,15 +209,18 @@ sudo rm -rfv vr_install
 
 announce "
 Done! Now reboot your system, and you should immediately be logged into steamOS mode.
+
 From now on, you can remote into your system using ssh for console access, and vnc for graphical access.
 Feel free to uninstall tigervnc if you don't want this!
 
-The password for user steam is steam. (change it if you wish, it has no effect on autologin)
-You can access your main VNC through port 5901.
-You can access the steam user VNC through port 5902. The password is steamvnc. You can use this to do stuff like add non-steam games to steam, install software needed under the steam account such as decky-loader, etc.
+A new user called steam has been created, and the password for it is steam. This keeps steam seperate from your main user account, in case you want to use this computer for other things too as your normal user account.
+You can change the steam user password if you wish, it has no effect on auto login.
+
+You can access VNC through port 5901, the password is steamvnc. This'll log you into a remote desktop session in the steam user account.
+You can use this to do stuff like add non-steam games to steam, install software needed under the steam account such as decky-loader, etc.
 
 Wivrn should also have been enabled, and on your quest, you should be able to connect!
-Open wivrn-dashboard in order to begin the wivrn pairing process. You can either do this using a mouse on your PC, or through VNC.
+Open wivrn-dashboard as the steam user in order to begin the wivrn pairing process. You can either do this using a mouse on your PC, or through VNC.
 
 When you're ready, reboot the system!
 
