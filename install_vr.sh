@@ -178,7 +178,7 @@ announce "installing wivrn, wlx-overlay-s and wayvr-dashboard.."
 sudo pacman --noconfirm -Sy avahi
 sudo systemctl enable --now avahi-daemon
 
-paru --noconfirm -Sy wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
+paru --noconfirm -Sy opencomposite-git wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
 # manually enable the service because using systemctl over sudo doesn't work well without very weird workarounds
 systemctl --user enable wivrn
 
