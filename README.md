@@ -22,3 +22,16 @@ It also, for convenience:
 
 ## WARNING
 this is intended to be used on a MINIMAL arch install! it modifies a ton of system critical stuff (such as sshd, vncserver, and a bunch of other things) to do it's thing. use it on an existing system at your own risk. It would work and add the steam user and reconfigure the system to autostart gamescope on boot, but it will replace some system configs.
+
+# install
+To quickly convert a minimal arch install, just do this:
+```
+pacman -Sy git
+git clone https://github.com/Rose22/arch_bootstrap_steamos_vr.git
+cd arch_bootstrap_steamos_vr
+chmod +x install_vr.sh
+clear
+./install_vr.sh
+```
+
+It's designed to ask for your password as minimally as possible, although some cases were hard to avoid. It's mostly unattended but you need to answer your password a few times.
