@@ -31,7 +31,7 @@ sudo pacman --noconfirm -Sy mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
 
 announce "enabling autologin for user.."
 sudo groupadd nopasswdlogin
-sudo useradd -m -G nopasswdlogin $(whoami)
+sudo usermod -m -G nopasswdlogin $(whoami)
 
 announce "installing vnc server for even more remote access.."
 sudo pacman --noconfirm -Sy tigervnc
