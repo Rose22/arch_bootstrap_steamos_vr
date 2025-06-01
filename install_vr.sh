@@ -12,6 +12,9 @@ if [ "$confirm" != "y" ]; then
 	exit
 fi
 
+echo "Enter your password to continue:"
+sudo echo
+
 mkdir vr_install
 cd vr_install
 
