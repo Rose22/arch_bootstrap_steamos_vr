@@ -180,7 +180,7 @@ sudo systemctl enable --now avahi-daemon
 
 paru --noconfirm -Sy wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
 # manually enable the service because using systemctl over sudo doesn't work well without very weird workarounds
-sudo systemctl --user enable wivrn
+systemctl --user enable wivrn
 
 # install custom scripts and configs
 mkdir $HOME/.scripts
