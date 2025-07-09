@@ -173,6 +173,8 @@ echo "please scroll down to the end of the file and then move the inserted code 
 echo "press enter to continue.."
 read
 
+chmod +x $HOME/.vrscripts/steam_insert_vr_runtime.sh
+
 echo "
 # makes VR work with wivrn.
 # move this above the 'set' statement in the script
@@ -191,7 +193,7 @@ announce "
 Done! Now reboot your system, and you should immediately be logged into steamOS mode.
 
 WiVRn should have been enabled, and on your quest, you should be able to connect!
-Open wivrn-dashboard as the steam user in order to begin the wivrn pairing process. You can either do this using a mouse on your PC, or through VNC.
+Open wivrn-dashboard in order to begin the wivrn pairing process.
 
 From now on, you can remote into your system using ssh for console access if needed. Feel free to disable that if you don't want it!
 
