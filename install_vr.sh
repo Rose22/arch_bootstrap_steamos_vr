@@ -39,6 +39,10 @@ cd ..
 announce "installing emptty display manager.."
 sudo paru --noconfirm -S emptty
 
+sudo groupadd nopasswdlogin
+sudo usermod $USER -a -G nopasswdlogin
+sudo mkdir -p /usr/share/wayland-sessions
+
 announce "writing emptty config.."
 cat <<EOF | sudo tee /etc/emptty/conf
 # TTY, where emptty will start.
