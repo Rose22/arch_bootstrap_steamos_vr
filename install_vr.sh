@@ -29,48 +29,6 @@ sudo systemctl enable NetworkManager
 announce "installing AMD GPU drivers.."
 sudo pacman --noconfirm -Sy mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
 
-announce "adding steam user (seperate user ensures less chance of failure).."
-sudo groupadd nopasswdlogin
-sudo useradd -m -G nopasswdlogin steam
-sudo bash -c "(echo steam; echo steam) | passwd steam"
-
-announce "installing vnc server for even more remote access.."
-sudo pacman --noconfirm -Sy tigervnc
-
-sudo -u steam bash -c "(echo steamvnc; echo steamvnc) | vncpasswd"
-cat <<EOF | sudo tee /etc/tigervnc/vncserver.users
-:1=steam
-EOF
-
-sudo -u steam mkdir -p /home/steam/.config/tigervnc
-cat <<EOF | sudo -u steam tee /home/steam/.config/tigervnc/config
-session=i3
-geometry=1024x768
-alwaysshared
-EOF
-
-cat <<EOF | sudo tee /etc/X11/xorg.conf.d/10-vnc.conf
-Section "Module"
-Load "vnc"
-EndSection
-
-Section "Screen"
-Identifier "Screen0"
-Option "UserPasswdVerifier" "VncAuth"
-Option "PasswordFile" "/root/.vnc/passwd"
-EndSection
-EOF
-
-# we need an X11 window manager in order to be able to log into the VNC server
-sudo pacman --noconfirm -Sy i3-wm i3status dmenu rofi kitty
-
-# but let's also have a wayland window manager handy
-sudo pacman --noconfirm -Sy sway waybar swaync swaybg swaylock swayimg swayidle
-
-sudo systemctl enable vncserver@:1
-
-announce "installed VNC, you can now log in remotely as steam to use graphical applications!"
-
 announce "installing paru.."
 sudo pacman --noconfirm -Sy --needed base-devel git rust
 git clone https://aur.archlinux.org/paru.git
@@ -90,13 +48,13 @@ TTY_NUMBER=7
 SWITCH_TTY=true
 
 # Enables printing of /etc/issue in daemon mode.
-PRINT_ISSUE=true
+PRINT_ISSUE=false
 
 # Enables printing of default motd, /etc/emptty/motd or /etc/emptty/motd-gen.sh.
 PRINT_MOTD=false
 
 # Preselected user, if AUTOLOGIN is enabled, this user is logged in.
-DEFAULT_USER=steam
+DEFAULT_USER=$(whoami)
 
 # Enables Autologin, if DEFAULT_USER is defined and part of nopasswdlogin group. Possible values are "true" or "false".
 AUTOLOGIN=true
@@ -181,13 +139,12 @@ sudo systemctl enable --now avahi-daemon
 
 paru --noconfirm -S opencomposite-git wivrn-dashboard wlx-overlay-s-git wayvr-dashboard-git
 # manually enable the service because using systemctl over sudo doesn't work well without very weird workarounds
-sudo -u steam mkdir -p /home/steam/.config/systemd/user/default.target.wants
-sudo -u steam ln -s /usr/lib/systemd/user/wivrn.service /home/steam/.config/systemd/user/default.target.wants/wivrn.service
+systemctl --user enable wivrn.service
 
 # install custom scripts and configs
-sudo -u steam mkdir /home/steam/.scripts
+mkdir $HOME/.vrscripts
 
-cat << EOF | sudo -u steam tee /home/steam/.scripts/start_wlxoverlay.sh
+cat << EOF | tee $HOME/.vrscripts/start_wlxoverlay.sh
 #!/bin/sh
 
 # remove the gamescope performance overlay (it can mess with things)
@@ -199,15 +156,31 @@ export WAYLAND_DISPLAY=gamescope-0
 
 wlx-overlay-s --headless --openxr
 EOF
-sudo -u steam chmod +x /home/steam/.scripts/start_wlxoverlay.sh
+chmod +x $HOME/.vrscripts/start_wlxoverlay.sh
 
-sudo -u steam mkdir -p /home/steam/.config/wivrn
-cat <<EOF | sudo -u steam tee /home/steam/.config/wivrn/config.json
+mkdir -p $HOME/.config/wivrn
+cat <<EOF | tee $HOME/.config/wivrn/config.json
 {
   "application": [
-	  "/home/steam/.scripts/start_wlxoverlay.sh"
+	  "$HOME/.vrscripts/start_wlxoverlay.sh"
   ]
 }
+EOF
+
+cat << EOF | tee $HOME/.vrscripts/steam_insert_vr_runtime.sh
+#!/bin/sh
+echo "this script will insert the required code into the steam linux runtime"
+echo "please scroll down to the end of the file and then move the inserted code to where it belongs"
+echo "press enter to continue.."
+read
+
+echo "
+# makes VR work with wivrn.
+# move this above the 'set' statement in the script
+export XR_RUNTIME_JSON=/run/host/usr/share/openxr/1/openxr_wivrn.json
+export PRESSURE_VESSEL_FILESYSTEMS_RW=$XDG_RUNTIME_DIR/wivrn/comp_ipc
+" >> ~/.steam/steam/steamapps/common/SteamLinuxRuntime_sniper/_v2-entry-point
+$EDITOR ~/.steam/steam/steamapps/common/SteamLinuxRuntime_sniper/_v2-entry-point
 EOF
 
 # cleanup
@@ -218,17 +191,14 @@ sudo rm -rfv vr_install
 announce "
 Done! Now reboot your system, and you should immediately be logged into steamOS mode.
 
-From now on, you can remote into your system using ssh for console access, and vnc for graphical access.
-Feel free to uninstall tigervnc if you don't want this!
-
-A new user called steam has been created, and the password for it is steam. This keeps steam seperate from your main user account, in case you want to use this computer for other things too as your normal user account.
-You can change the steam user password if you wish, it has no effect on auto login.
-
-You can access VNC through port 5901, the password is steamvnc. This'll log you into a remote desktop session in the steam user account.
-You can use this to do stuff like add non-steam games to steam, install software needed under the steam account such as decky-loader, etc.
-
-Wivrn should also have been enabled, and on your quest, you should be able to connect!
+WiVRn should have been enabled, and on your quest, you should be able to connect!
 Open wivrn-dashboard as the steam user in order to begin the wivrn pairing process. You can either do this using a mouse on your PC, or through VNC.
+
+From now on, you can remote into your system using ssh for console access if needed. Feel free to disable that if you don't want it!
+
+In your home directory is a hidden folder called .vrscripts, it has a variety of useful scripts.
+You can use the steam_insert_vr_runtime script to add the VR runtime instructions needed for VR to function, into the steam linux runtime.
+This is a workaround for a quirk about WiVRn that will hopefully be fixed in the future.
 
 When you're ready, reboot the system!
 
